@@ -1,7 +1,6 @@
+package hw1;
 import java.io.*;
 import java.util.Scanner;
-
-import hw1.*;
 
 public class DigitalImageIO {
     public enum ImageType { INDEXED, PACKED, LINEAR_ARRAY, MULTIDIM_ARRAY };

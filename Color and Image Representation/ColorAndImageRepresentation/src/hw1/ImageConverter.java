@@ -1,7 +1,6 @@
+package hw1;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
-import hw1.*;
-
 
 public class ImageConverter {
     
@@ -28,7 +27,7 @@ public class ImageConverter {
 
         for(int row = 0; row < src.getHeight(); row++) {
             for(int column = 0; column < src.getWidth(); column ++) {
-                src.getData().getPixel(row, column, bands);
+                src.getData().getPixel(column, row, bands);
                 pImage.setPixel(column, row, bands);
             }
         }

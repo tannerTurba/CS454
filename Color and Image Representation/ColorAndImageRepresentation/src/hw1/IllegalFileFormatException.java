@@ -1,3 +1,4 @@
+package hw1;
 
 public class IllegalFileFormatException extends Throwable {
     public IllegalFileFormatException() {
