@@ -28,39 +28,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package hw1;
 
 /**
  * 
  * @author Kenny Hunt
  */
-public class LinearArrayDigitalImage extends AbstractDigitalImage {
-    private int[] raster;
+public class ArrayDigitalImage extends AbstractDigitalImage {
+    private int[][][] raster;
 
-    public LinearArrayDigitalImage(int w, int h, int b) {
-        super(w, h, b);
-        raster = new int[width * height * bands];
+    public ArrayDigitalImage(int width, int height, int bands) {
+        super(width, height, bands);
+        raster = new int[height][width][bands];
     }
 
-   @Override
     public int getSample(int x, int y, int b) {
-        return raster[bands * (x + y * width) + b];
+        return raster[y][x][b];
     }
 
-   @Override
     public void setSample(int x, int y, int b, int s) {
-        raster[bands * (x + y * width) + b] = s;
+        raster[y][x][b] = s;
     }
 
-   @Override
     public int[] getPixel(int x, int y) {
         int[] result = new int[bands];
-        System.arraycopy(raster, bands * (x + y * width), result, 0, bands);
+        System.arraycopy(raster[y][x], 0, result, 0, bands);
         return result;
     }
 
-   @Override
     public void setPixel(int x, int y, int[] pixel) {
-        System.arraycopy(pixel, 0, raster, bands * (x + y * width), bands);
+        System.arraycopy(pixel, 0, raster[y][x], 0, bands);
     }
 }

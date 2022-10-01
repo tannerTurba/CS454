@@ -1,4 +1,3 @@
-package hw1;
 import java.io.*;
 import java.util.Scanner;
 
@@ -9,7 +8,7 @@ public class DigitalImageIO {
         //Open file and check the file format. 
         Scanner scanner = new Scanner(file);
         String fileFormat = scanner.nextLine();
-        if(!scanner.next().equals("P3")) {
+        if(!fileFormat.equals("P3")) {
             scanner.close();
             throw new IllegalFileFormatException(fileFormat, "P3");
         }
@@ -43,12 +42,11 @@ public class DigitalImageIO {
                 int green = Integer.parseInt(scanner.next());
                 int blue = Integer.parseInt(scanner.next());
                 int [] pixel = {red, green, blue};
-                image.setPixel(row, column, pixel);
+                image.setPixel(column, row, pixel);
             }
             //Consume the whitespace and newline character. 
             scanner.nextLine();
         }
-
         scanner.close();
         return image;
     }
@@ -57,17 +55,17 @@ public class DigitalImageIO {
         //Open the file writer and write format, width, and height to the file.
         FileWriter fWriter = new FileWriter(file);
         fWriter.write("P3\n");
-        fWriter.write(image.getWidth() + '\n');
-        fWriter.write(image.getHeight() + '\n');
+        fWriter.write(image.getWidth() + "\n");
+        fWriter.write(image.getHeight() + "\n");
 
         //Loop through the DigitalImage and write each RGB component to the file. 
         for(int row = 0; row < image.getHeight(); row++) {
             for(int column = 0; column < image.getWidth(); column ++) {
-                for(int i :image.getPixel(row, column)) {
+                for(int i :image.getPixel(column, row)) {
                     fWriter.write(i + " ");
                 }
             }
-            fWriter.write('\n');
+            fWriter.write("\n");
         }
         fWriter.close();
     }

@@ -28,35 +28,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package hw1;
 
 /**
- * 
- * @author Kenny Hunt
+ *
+ * @author Kennrow Hunt
  */
-public class ArrayDigitalImage extends AbstractDigitalImage {
-    private int[][][] raster;
+public class PackedPixelImage extends AbstractDigitalImage {
+   private int[] raster;
+   private static final int MASK0 = 0xff, MASK1 = 0xff00, MASK2 = 0xff0000, MASK3 = 0xff000000;
 
-    public ArrayDigitalImage(int width, int height, int bands) {
-        super(width, height, bands);
-        raster = new int[height][width][bands];
-    }
+   public PackedPixelImage(int width, int height, int bands) {
+      super(width, height, bands);
+      raster = new int[width * height];
+   }
 
-    public int getSample(int x, int y, int b) {
-        return raster[y][x][b];
-    }
+   private int getMask(int band) {
+      switch(band) {
+         case 0: return MASK0;
+         case 1: return MASK1;
+         case 2: return MASK2;
+         case 3: return MASK3;
+         default: throw new IllegalArgumentException();
+      }
+   }
 
-    public void setSample(int x, int y, int b, int s) {
-        raster[y][x][b] = s;
-    }
+   public int getSample(int col, int row, int band) {
+      return (raster[col + row * width] >> (band * 8)) & 0xFF;
+   }
 
-    public int[] getPixel(int x, int y) {
-        int[] result = new int[bands];
-        System.arraycopy(raster[y][x], 0, result, 0, bands);
-        return result;
-    }
+   public void setSample(int col, int row, int band, int s) {
+      int pixelIndex = row * width + col;
+      int pixel = raster[pixelIndex];
+      int mask = getMask(band); 
 
-    public void setPixel(int x, int y, int[] pixel) {
-        System.arraycopy(pixel, 0, raster[y][x], 0, bands);
-    }
+      pixel = (pixel & ~mask) ^ s << (band * 8);
+      raster[pixelIndex] = pixel;
+   }
+
+   public int[] getPixel(int col, int row) {
+      int[] result = new int[bands];
+      for (int b = 0; b < bands; b++) {
+         result[b] = getSample(col, row, b);
+      }
+      return result;
+   }
+
+   public void setPixel(int col, int row, int[] pixel) {
+      for (int b = 0; b < bands; b++) {
+         setSample(col, row, b, pixel[b]);
+      }
+   }
+
 }

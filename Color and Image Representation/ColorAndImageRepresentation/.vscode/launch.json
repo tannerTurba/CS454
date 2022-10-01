@@ -14,9 +14,9 @@
             "type": "java",
             "name": "Launch Tester",
             "request": "launch",
-            "mainClass": "hw1.Tester",
+            "mainClass": "Tester",
             "projectName": "ColorAndImageRepresentation_d844804c",
-            "args": "man0.png man1.png man2.png man3.png",
+            "args": "man.png man2.ppm INDEXED man2.png",
         }
     ]
 }

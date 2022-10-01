@@ -28,56 +28,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package hw1;
 
 /**
- *
- * @author Kennrow Hunt
+ * 
+ * @author Kenny Hunt
  */
-public class PackedPixelImage extends AbstractDigitalImage {
-   private int[] raster;
-   private static final int MASK0 = 0xff, MASK1 = 0xff00, MASK2 = 0xff0000, MASK3 = 0xff000000;
-
-   public PackedPixelImage(int width, int height, int bands) {
-      super(width, height, bands);
-      raster = new int[width * height];
-   }
-
-   private int getMask(int band) {
-      switch(band) {
-         case 0: return MASK0;
-         case 1: return MASK1;
-         case 2: return MASK2;
-         case 3: return MASK3;
-         default: throw new IllegalArgumentException();
-      }
-   }
-
-   public int getSample(int col, int row, int band) {
-      return (raster[col + row * width] >> (band * 8)) & 0xFF;
-   }
-
-   public void setSample(int col, int row, int band, int s) {
-      int pixelIndex = row * width + col;
-      int pixel = raster[pixelIndex];
-      int mask = getMask(band); 
-
-      pixel = (pixel & ~mask) ^ s << (band * 8);
-      raster[pixelIndex] = pixel;
-   }
-
-   public int[] getPixel(int col, int row) {
-      int[] result = new int[bands];
-      for (int b = 0; b < bands; b++) {
-         result[b] = getSample(col, row, b);
-      }
-      return result;
-   }
-
-   public void setPixel(int col, int row, int[] pixel) {
-      for (int b = 0; b < bands; b++) {
-         setSample(col, row, b, pixel[b]);
-      }
-   }
-
+public interface DigitalImage {
+    public int getWidth();
+    public int getHeight();
+    public int getBands();
+    int[] getPixel(int x, int y);
+    void setPixel(int x, int y, int[] pixel);
+    int getSample(int x, int y, int band);
+    void setSample(int x, int y, int band, int sample);
 }

@@ -1,4 +1,3 @@
-package hw1;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
@@ -11,7 +10,7 @@ public class ImageConverter {
 
         for(int row = 0; row < src.getHeight(); row++) {
             for(int column = 0; column < src.getWidth(); column ++) {
-                int [] bands = src.getPixel(row, column);
+                int [] bands = src.getPixel(column, row);
                 Color c = new Color(bands[0], bands[1], bands[2]);
                 bImage.setRGB(column, row, c.getRGB());
             }

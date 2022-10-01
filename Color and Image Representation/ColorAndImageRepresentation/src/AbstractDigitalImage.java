@@ -1,4 +1,4 @@
-package hw1;
+
 public abstract class AbstractDigitalImage implements DigitalImage {
     protected int width, height, bands;
 

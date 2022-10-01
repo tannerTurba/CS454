@@ -1,4 +1,3 @@
-package hw1;
 import java.awt.*;
 
 
@@ -48,8 +47,11 @@ public class IndexedDigitalImage implements DigitalImage {
 
     @Override
     public int[] getPixel(int x, int y) {
-        int paletteIndex = pixels[rasterIndex(x, y)];
+        //Get the palette index and then color
+        int paletteIndex = Byte.toUnsignedInt(pixels[rasterIndex(x, y)]);
         Color pixelColor = getPaletteColor(paletteIndex);
+
+        //Return the three components put in an array. 
         int[] pixel = {pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue()};
         return pixel;
     }
@@ -63,14 +65,16 @@ public class IndexedDigitalImage implements DigitalImage {
         
         //Add color to the palette and then set the btye in pixels to the new palette index.
         int paletteIndex = addColorToPalette(color);
-        pixels[x * y] = (byte)paletteIndex;
+        pixels[rasterIndex(x, y)] = (byte)paletteIndex;
     }
 
     @Override
     public int getSample(int x, int y, int band) {
-        int paletteIndex = (int)pixels[rasterIndex(x, y)];
+        //Get the pallete index and color. 
+        int paletteIndex = Byte.toUnsignedInt(pixels[rasterIndex(x, y)]);
         Color pixelColor = palette[paletteIndex];
 
+        //Get the specified band.
         switch( band ) {
             case 0: return pixelColor.getRed();
             case 1: return pixelColor.getGreen();
@@ -110,19 +114,20 @@ public class IndexedDigitalImage implements DigitalImage {
         }
         //Otherwise search the palette for the color closest to new color.
         else {
-            setPaletteColor(findSimilarColor(color), color);
+            paletteIndex = findSimilarColor(color);
+            setPaletteColor(paletteIndex, color);
         }
         return paletteIndex;
     }
 
     private int findSimilarColor(Color color) {
-        double bestL1 = 1.0;
+        double bestL1 = 10.0;
         int index = -1;
 
         //Loop through the palette and find the index of the most similar color using the L1 formula. 
         for (int i = 0; i < PALETTESIZE; i++) {
             if(palette[i] != null) {
-                double l1 = Math.sqrt(Math.pow((color.getRed() - palette[i].getRed()), 2) + Math.pow((color.getGreen() - palette[i].getGreen()), 2) + Math.pow((color.getBlue() - palette[i].getBlue()), 2));
+                double l1 = Math.sqrt(Math.pow((color.getRed() - palette[i].getRed()), 2) + Math.pow((color.getGreen() - palette[i].getGreen()), 2) + Math.pow((color.getBlue() - palette[i].getBlue()), 2)) / 256;
                 if(l1 < bestL1) {
                     bestL1 = l1;
                     index = i;

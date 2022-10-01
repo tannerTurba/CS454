@@ -28,17 +28,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package hw1;
+
 /**
  * 
  * @author Kenny Hunt
  */
-public interface DigitalImage {
-    public int getWidth();
-    public int getHeight();
-    public int getBands();
-    int[] getPixel(int x, int y);
-    void setPixel(int x, int y, int[] pixel);
-    int getSample(int x, int y, int band);
-    void setSample(int x, int y, int band, int sample);
+public class LinearArrayDigitalImage extends AbstractDigitalImage {
+    private int[] raster;
+
+    public LinearArrayDigitalImage(int w, int h, int b) {
+        super(w, h, b);
+        raster = new int[width * height * bands];
+    }
+
+   @Override
+    public int getSample(int x, int y, int b) {
+        return raster[bands * (x + y * width) + b];
+    }
+
+   @Override
+    public void setSample(int x, int y, int b, int s) {
+        raster[bands * (x + y * width) + b] = s;
+    }
+
+   @Override
+    public int[] getPixel(int x, int y) {
+        int[] result = new int[bands];
+        System.arraycopy(raster, bands * (x + y * width), result, 0, bands);
+        return result;
+    }
+
+   @Override
+    public void setPixel(int x, int y, int[] pixel) {
+        System.arraycopy(pixel, 0, raster, bands * (x + y * width), bands);
+    }
 }
