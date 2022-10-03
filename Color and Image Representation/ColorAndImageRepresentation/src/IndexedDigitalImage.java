@@ -13,6 +13,16 @@ public class IndexedDigitalImage implements DigitalImage {
         this.width = width;
         this.height = height;
         pixels = new byte[width * height];
+
+        int index = 0;
+        for(float r = 0; r < 1.0 && index < 256; r += 0.15){
+            for(float g = 0; g < 1.0 && index < 256; g += 0.167) {
+                for(float b = 0; b < 1.0 && index < 256; b += 0.167) {
+                    palette[index] = new Color(r, g, b);
+                    index ++;
+                }
+            }
+        }
     }
 
     public IndexedDigitalImage(int width, int height, Color[] palette) {
@@ -64,7 +74,7 @@ public class IndexedDigitalImage implements DigitalImage {
         Color color = new Color(pixelCopy[0], pixelCopy[1], pixelCopy[2]);
         
         //Add color to the palette and then set the btye in pixels to the new palette index.
-        int paletteIndex = addColorToPalette(color);
+        int paletteIndex = findSimilarColor(color);
         pixels[rasterIndex(x, y)] = (byte)paletteIndex;
     }
 
@@ -115,7 +125,8 @@ public class IndexedDigitalImage implements DigitalImage {
         //Otherwise search the palette for the color closest to new color.
         else {
             paletteIndex = findSimilarColor(color);
-            setPaletteColor(paletteIndex, color);
+            //setPaletteColor(paletteIndex, color);
+
         }
         return paletteIndex;
     }
